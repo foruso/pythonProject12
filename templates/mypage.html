@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>마이페이지</h2>
+<p>환영합니다, {{ user_id }}님!</p>
+
+<h3>내가 올린 설문조사</h3>
+<div class="survey-grid">
+    {% for survey in surveys %}
+    <div class="survey-box">
+        <button class="delete-btn" onclick="deleteSurvey({{ loop.index0 }})">x</button>
+        <h3>{{ survey.title }}</h3>
+        <p>{{ survey.description }}</p>
+        <span>분야: {{ survey.field }} | 대상: {{ survey.target }}</span>
+        <span>등록일: {{ survey.created_at }}</span>
+    </div>
+    {% endfor %}
+</div>
+
+<h3>새로운 설문조사 등록</h3>
+<form method="POST">
+    <label for="title">제목:</label>
+    <input type="text" id="title" name="title" required>
+    <label for="link">링크:</label>
+    <input type="url" id="link" name="link" required>
+    <label for="description">설명:</label>
+    <textarea id="description" name="description" required></textarea>
+    <label for="field">분야:</label>
+    <select id="field" name="field" required>
+        <option value="사회">사회</option>
+        <option value="과학">과학</option>
+        <option value="인문학">인문학</option>
+        <option value="기타">기타</option>
+    </select>
+    <label for="target">대상:</label>
+    <select id="target" name="target" required>
+        <option value="1학년">1학년</option>
+        <option value="2학년">2학년</option>
+        <option value="3학년">3학년</option>
+    </select>
+    <button type="submit">등록</button>
+</form>
+<script>
+function deleteSurvey(index) {
+    if (confirm("정말 삭제하시겠습니까?")) {
+        fetch("/delete_survey", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ index: index })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        });
+    }
+}
+</script>
+{% endblock %}

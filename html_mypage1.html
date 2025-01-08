@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>풍웹</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .survey-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>풍웹: 설문조사 플랫폼</h1>
+    </header>
+
+    <div class="container" id="login-container">
+        <h2>로그인</h2>
+        <div class="input-group">
+            <label for="student-id">학번</label>
+            <input type="text" id="student-id" placeholder="예: 1415">
+        </div>
+        <div class="input-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" placeholder="비밀번호">
+        </div>
+        <button onclick="login()">로그인</button>
+    </div>
+
+    <div class="container" id="mypage-container" style="display: none;">
+        <h2>마이페이지</h2>
+        <p>온도: <span id="temperature">36.5</span>℃</p>
+
+        <h3>설문조사 등록</h3>
+        <div class="input-group">
+            <label for="survey-title">설문조사 제목</label>
+            <input type="text" id="survey-title" placeholder="설문조사 제목">
+        </div>
+        <div class="input-group">
+            <label for="survey-link">설문조사 링크</label>
+            <input type="url" id="survey-link" placeholder="https://">
+        </div>
+        <div class="input-group">
+            <label for="survey-category">분야</label>
+            <select id="survey-category">
+                <option value="사회">사회</option>
+                <option value="과학">과학</option>
+                <option value="인문학">인문학</option>
+                <option value="법학">법학</option>
+                <option value="의학">의학</option>
+                <option value="심리학">심리학</option>
+                <option value="경제학">경제학</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="survey-target">대상</label>
+            <select id="survey-target">
+                <option value="1학년">1학년</option>
+                <option value="2학년">2학년</option>
+                <option value="3학년">3학년</option>
+            </select>
+        </div>
+        <button onclick="addSurvey()">등록</button>
+
+        <h3>내가 올린 설문조사</h3>
+        <div id="my-surveys">
+            <!-- 설문조사 리스트가 여기에 추가됩니다 -->
+        </div>
+    </div>
+
+    <script>
+        const userData = {
+            id: '1415',
+            password: '1415', // 초기 비밀번호
+            temperature: 36.5,
+            surveys: []
+        };
+
+        function login() {
+            const id = document.getElementById('student-id').value;
+            const password = document.getElementById('password').value;
+
+            if (id === userData.id && password === userData.password) {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('mypage-container').style.display = 'block';
+                document.getElementById('temperature').innerText = userData.temperature;
+            } else {
+                alert('학번 또는 비밀번호가 잘못되었습니다.');
+            }
+        }
+
+        function addSurvey() {
+            const title = document.getElementById('survey-title').value;
+            const link = document.getElementById('survey-link').value;
+            const category = document.getElementById('survey-category').value;
+            const target = document.getElementById('survey-target').value;
+
+            if (title && link) {
+                const survey = { title, link, category, target, date: new Date().toLocaleString() };
+                userData.surveys.push(survey);
+                updateSurveyList();
+                alert('설문조사가 등록되었습니다.');
+            } else {
+                alert('제목과 링크를 입력해주세요.');
+            }
+        }
+
+        function updateSurveyList() {
+            const surveyList = document.getElementById('my-surveys');
+            surveyList.innerHTML = '';
+            userData.surveys.forEach((survey, index) => {
+                const surveyItem = document.createElement('div');
+                surveyItem.className = 'survey-item';
+                surveyItem.innerHTML = `
+                    <div>
+                        <strong>${survey.title}</strong>
+                        <p>분야: ${survey.category}, 대상: ${survey.target}</p>
+                        <p>등록일: ${survey.date}</p>
+                    </div>
+                    <button onclick="deleteSurvey(${index})">삭제</button>
+                `;
+                surveyList.appendChild(surveyItem);
+            });
+        }
+
+        function deleteSurvey(index) {
+            userData.surveys.splice(index, 1);
+            updateSurveyList();
+            alert('설문조사가 삭제되었습니다.');
+        }
+    </script>
+</body>
+</html>

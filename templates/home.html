@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>최근 설문조사</h2>
+<div class="survey-grid">
+    {% for survey in surveys %}
+    <div class="survey-box">
+        <a href="{{ survey.link }}" target="_blank">
+            <h3>{{ survey.title }}</h3>
+            <p>{{ survey.description }}</p>
+            <span>분야: {{ survey.field }} | 대상: {{ survey.target }}</span>
+            <span>업로더: {{ survey.uploader }} | 등록일: {{ survey.created_at }}</span>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>풍웹</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #ffffff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+        header nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #555;
+        }
+        header nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            padding: 20px;
+        }
+        .survey-box {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .survey-box:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .survey-box h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .survey-box p {
+            margin: 0;
+            color: #666;
+        }
+        .survey-box span {
+            margin-top: 10px;
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 onclick="goToHome()">풍웹</h1>
+        <nav>
+            <a href="#login">로그인</a>
+            <a href="#mypage">마이페이지</a>
+        </nav>
+    </header>
+    <div class="container" id="home">
+        <h2>최근 설문조사</h2>
+        <div id="survey-list">
+            <!-- 설문조사 박스들이 동적으로 추가될 부분 -->
+        </div>
+    </div>
+
+    <script>
+        // 설문조사 데이터 예제
+        const surveys = [
+            {
+                uploader: "홍길동",
+                temperature: "37.5℃",
+                title: "수면시간과 성적의 관계",
+                description: "수면시간이 성적에 미치는 영향을 분석하기 위한 설문입니다.",
+            },
+            {
+                uploader: "김영희",
+                temperature: "36.8℃",
+                title: "복지 선호도와 사회 진화론",
+                description: "사회 진화론에 대한 의견과 복지 정책의 선호도를 조사합니다.",
+            },
+            {
+                uploader: "이철수",
+                temperature: "38.2℃",
+                title: "통합적 읽기에 대한 설문",
+                description: "통합적 읽기와 관련된 의견을 수집하는 설문입니다.",
+            },
+        ];
+
+        // 홈 화면의 설문조사 리스트 생성
+        const surveyList = document.getElementById("survey-list");
+
+        surveys.forEach((survey) => {
+            const surveyBox = document.createElement("div");
+            surveyBox.className = "survey-box";
+
+            surveyBox.innerHTML = `
+                <h3>${survey.title}</h3>
+                <p>${survey.description}</p>
+                <span>업로더: ${survey.uploader} | 온도: ${survey.temperature}</span>
+            `;
+
+            surveyList.appendChild(surveyBox);
+        });
+
+        // 홈으로 이동하는 함수
+        function goToHome() {
+            window.location.href = "#home";
+        }
+    </script>
+</body>
+</html>
